@@ -1,98 +1,76 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { Button, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import * as Speech from 'expo-speech';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
+import SpeechToText from '@/components/speech-to-text';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [textToSpeak, setTextToSpeak] = useState('Bonjour, comment ça va ?');
+  const [speaking, setSpeaking] = useState(false);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
+  const speak = () => {
+    setSpeaking(true);
+    Speech.speak(textToSpeak, {
+      language: 'fr-FR',
+      onDone: () => setSpeaking(false),
+      onStopped: () => setSpeaking(false),
+      onError: () => setSpeaking(false),
+    });
+  };
+
+  const stopSpeaking = () => {
+    Speech.stop();
+    setSpeaking(false);
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <ThemedText type="title">Test Voix FR</ThemedText>
+
+      {/* TTS — marche dans Expo Go */}
+      <ThemedView style={styles.card}>
+        <ThemedText type="subtitle">TTS — texte → voix</ThemedText>
+        <TextInput
+          style={styles.input}
+          value={textToSpeak}
+          onChangeText={setTextToSpeak}
+          placeholder="Texte à lire"
+          multiline
+        />
+        <View style={styles.row}>
+          <Button title="🔊 Parler" onPress={speak} disabled={speaking} />
+          <Button title="⏹ Stop" onPress={stopSpeaking} disabled={!speaking} />
+        </View>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+
+      {/* STT — Deepgram cloud, marche dans Expo Go */}
+      <ThemedView style={styles.card}>
+        <ThemedText type="subtitle">STT — voix → texte (Deepgram)</ThemedText>
+        <SpeechToText />
       </ThemedView>
-    </ParallaxScrollView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: { gap: 20, padding: 20, paddingTop: 80 },
+  card: {
+    gap: 12,
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#888',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  input: {
+    minHeight: 60,
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#888',
+    fontSize: 18,
+    color: '#888',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  row: { flexDirection: 'row', gap: 12, alignItems: 'center' },
 });
