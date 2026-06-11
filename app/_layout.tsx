@@ -1,24 +1,34 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import '../global.css';
+
+import { ThemeProvider } from '@react-navigation/native';
+import { PortalHost } from '@rn-primitives/portal';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { colorScheme } from 'nativewind';
+import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { MichiNavTheme } from '@/constants/theme';
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: '(drawer)',
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  // Michi ships a single warm-dark theme — lock it regardless of the OS setting.
+  useEffect(() => {
+    colorScheme.set('dark');
+  }, []);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={MichiNavTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(drawer)" />
+        </Stack>
+        <StatusBar style="light" />
+        <PortalHost />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

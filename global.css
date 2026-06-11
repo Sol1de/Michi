@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Michi — warm dark theme (single theme, matches Figma mockup). */
+@layer base {
+  :root {
+    --background: 20 17% 7%;
+    --foreground: 23 39% 94%;
+    --card: 22 10% 16%;
+    --card-foreground: 23 39% 94%;
+    --popover: 22 10% 16%;
+    --popover-foreground: 23 39% 94%;
+    --primary: 19 100% 84%;
+    --primary-foreground: 20 37% 35%;
+    --secondary: 354 78% 84%;
+    --secondary-foreground: 352 16% 20%;
+    --muted: 22 10% 16%;
+    --muted-foreground: 23 14% 60%;
+    --accent: 20 36% 39%;
+    --accent-foreground: 23 39% 94%;
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 22 12% 20%;
+    --input: 18 13% 13%;
+    --ring: 19 100% 84%;
+    --radius: 1rem;
+  }
+
+  /* Force the warm-dark palette regardless of OS color scheme. */
+  .dark:root {
+    --background: 20 17% 7%;
+    --foreground: 23 39% 94%;
+    --card: 22 10% 16%;
+    --card-foreground: 23 39% 94%;
+    --popover: 22 10% 16%;
+    --popover-foreground: 23 39% 94%;
+    --primary: 19 100% 84%;
+    --primary-foreground: 20 37% 35%;
+    --secondary: 354 78% 84%;
+    --secondary-foreground: 352 16% 20%;
+    --muted: 22 10% 16%;
+    --muted-foreground: 23 14% 60%;
+    --accent: 20 36% 39%;
+    --accent-foreground: 23 39% 94%;
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 22 12% 20%;
+    --input: 18 13% 13%;
+    --ring: 19 100% 84%;
+    --radius: 1rem;
+  }
+}
