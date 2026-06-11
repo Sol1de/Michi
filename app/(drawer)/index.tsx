@@ -33,9 +33,9 @@ export default function ChatScreen() {
   const visible = messages.filter((m) => m.role !== 'system');
   const isEmpty = visible.length === 0 && !loading;
   const keyboardOpen = keyboardHeight > 0;
-  // +16 clearance when the keyboard is up — Android under-reports its top edge
+  // +22 clearance when the keyboard is up — Android under-reports its top edge
   // by a few px on edge-to-edge, so the bar would otherwise touch the keys.
-  const bottomPad = keyboardOpen ? keyboardHeight + 16 : insets.bottom + 8;
+  const bottomPad = keyboardOpen ? keyboardHeight + 26 : insets.bottom + 8;
 
   return (
     <View className="bg-background flex-1">
